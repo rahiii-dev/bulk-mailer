@@ -1,11 +1,8 @@
 import askConfigurations from "./cli/ask-config.js";
 import askProceed from "./cli/ask-proceed.js";
-import { sendEmail } from "./utils/mailer.js";
+import { saveFailedEmails } from "./utils/file.js";
+import { sendBatch } from "./utils/mailer.js";
 import prepareMail from "./utils/prepareMail.js";
-import fs from "fs";
-import path from "path";
-
-const logFile = path.resolve("email-log.txt");
 
 async function main() {
   const { template, dataFile, attachments } = await askConfigurations();
@@ -18,19 +15,22 @@ async function main() {
 
   const mailData = await prepareMail(template, dataFile, attachments);
 
-  for (const mail of mailData) {
-    try {
-      const info = await sendEmail(mail);
-      const successMsg = `✅ Email sent to ${mail.to} - Message ID: ${info.messageId}\n`;
-      console.log(successMsg);
-    } catch (error) {
-      const errorMsg = `❌ Failed to send email to ${mail.to} - Error: ${error.message}\n`;
-      console.error(errorMsg);
-      fs.appendFileSync(logFile, errorMsg);
+  let failedMails = await sendBatch(mailData);
+
+  while (failedMails.length > 0) {
+    const file = await saveFailedEmails(failedMails);
+    console.log(`\n📄 Saved ${failedMails.length} failed emails to ${file}\n`);
+
+    const retry = await askProceed("Retry sending failed emails?");
+    if (!retry) {
+      console.log("Operation cancelled by user.");
+      process.exit(0);
     }
+
+    failedMails = await sendBatch(failedMails);
   }
 
-  console.log(`\n📄 Log written to: ${logFile}`);
+  console.log("\n🎉 All emails sent successfully!");
 }
 
 main().catch((err) => {

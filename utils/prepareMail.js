@@ -39,7 +39,6 @@ export default async function prepareMails(templateFile, dataFile, attachments =
 
     return mailData;
   } catch (error) {
-    console.error('❌ Failed to prepare mails:', error.message);
     throw error; 
   }
 }

@@ -6,6 +6,7 @@ export const ROOT_DIR = process.cwd();
 export const TEMPLATES_DIR = "./templates";
 export const DATA_DIR = "./data";
 export const ATTACHMENTS_DIR = "./attachments";
+export const EMAIL_ERROR_DIR = DATA_DIR + "/errors";
 
 
 export const SMTP_HOST = getOrThrow("SMTP_HOST");
