@@ -7,4 +7,4 @@ data/
 *log.txt
 .env
 
-google/credential/
+/lib/google/credential/
