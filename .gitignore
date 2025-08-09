@@ -6,3 +6,5 @@ data/
 
 *log.txt
 .env
+
+google/credential/
