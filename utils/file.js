@@ -40,7 +40,7 @@ export async function saveFailedEmails(failedMails) {
 
   await fs.mkdir(errorsDir, { recursive: true });
 
-  const dateStr = new Date().toISOString().split("T")[0]; 
+  const dateStr = new Date().toISOString().split("T")[0];
   const fileName = `failed-${dateStr}.json`;
   const filePath = path.join(errorsDir, fileName);
 
@@ -50,4 +50,18 @@ export async function saveFailedEmails(failedMails) {
   } catch (err) {
     console.error(`\n❌ Could not save failed emails: ${err.message}\n`);
   }
+}
+
+export async function createDirectoryIfNotExit(dir) {
+  const fullPath = path.resolve(ROOT_DIR, dir);
+  let created = false;
+
+  try {
+    await fs.access(fullPath);
+  } catch {
+    await fs.mkdir(fullPath, { recursive: true });
+    created = true;
+  }
+
+  return { fullPath, created };
 }

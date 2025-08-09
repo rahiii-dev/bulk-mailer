@@ -5,8 +5,10 @@ import getTemplateAndData from "./utils/getTemplateAndData.js";
 import { sendBatch } from "./lib/mailer.js";
 import { processMails } from "./utils/mail-helpers.js";
 import { updateMailResults } from "./utils/sheet-helpers.js";
+import initDirectories from "./utils/initDirectories.js";
 
 async function main() {
+  await initDirectories();
   const { template, data, attachments } = await askConfigurations();
 
   console.log("\nPreparing mail....\n");

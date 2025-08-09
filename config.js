@@ -17,7 +17,8 @@ export const SMTP_SECURE = process.env.SMTP_SECURE || "true";
 export const SMTP_USER_NAME = getOrThrow("SMTP_USER_NAME");
 
 // google sheet
-export const GOOGLE_CREDENTIAL_FILE =  "lib/google/credential/cred.json";
+export const GOOGLE_CREDENTIAL_DIR =  "./lib/google/credential";
+export const GOOGLE_CREDENTIAL_FILE =  `${GOOGLE_CREDENTIAL_DIR}/cred.json`;
 export const SHEET_ID = getOrThrow("SHEET_ID");
 export const DATA_SHEET_NAME = getOrThrow("DATA_SHEET_NAME");
 export const COMPLETED_SHEET_NAME = getOrThrow("COMPLETED_SHEET_NAME");
